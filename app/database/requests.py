@@ -13,19 +13,33 @@ async def add_user_db(u_id):
             await session.commit()
 
 
-async def add_location_db(lat, lon, name):
+async def get_locations_device():
     async with async_session() as session:
-        location_query = await session.scalar(select(Location).where(Location.latitude == lat, Location.longitude == lon))
-        
-        if not location_query:
-            address = await get_address(lat, lon)
-            session.add(Location(latitude=lat, longitude=lon, name=name, address=address))
-            await session.commit()
+        locations = await session.scalars(select(Location).where(Location.buy_device == 'X'))
+        return locations
 
 
-async def get_locations():
+async def get_locations_sticks():
     async with async_session() as session:
-        locations = await session.scalars(select(Location))
+        locations = await session.scalars(select(Location).where(Location.buy_stick == 'X'))
+        return locations
+
+
+async def get_locations_guarantee():
+    async with async_session() as session:
+        locations = await session.scalars(select(Location).where(Location.guarantee == 'X'))
+        return locations
+
+
+async def get_locations_international_guarantee():
+    async with async_session() as session:
+        locations = await session.scalars(select(Location).where(Location.firmware == 'X'))
+        return locations
+
+
+async def get_locations_cleaning():
+    async with async_session() as session:
+        locations = await session.scalars(select(Location).where(Location.cleaning == 'X'))
         return locations
 
 
@@ -39,3 +53,15 @@ async def get_admins():
     async with async_session() as session:
         admins = await session.scalars(select(Admin.tg_id))
         return admins
+
+
+async def get_users_ids():
+    async with async_session() as session:
+        users = await session.scalars(select(User.tg_id))
+        return users
+
+
+async def delete_user(user_id):
+    async with async_session() as session:
+        await session.execute(delete(User).where(User.tg_id == user_id))
+        await session.commit()

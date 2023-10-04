@@ -32,6 +32,11 @@ class Location(Base):
     latitude: Mapped[float] = mapped_column()
     longitude: Mapped[float] = mapped_column()
     name: Mapped[str] = mapped_column(String(120))
+    buy_device: Mapped[str] = mapped_column(String(1), nullable=True)
+    buy_stick: Mapped[str] = mapped_column(String(1), nullable=True)
+    guarantee: Mapped[str] = mapped_column(String(1), nullable=True)
+    firmware: Mapped[str] = mapped_column(String(1), nullable=True)
+    cleaning: Mapped[str] = mapped_column(String(1), nullable=True)
 
 
 class Admin(Base):
